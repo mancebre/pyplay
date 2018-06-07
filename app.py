@@ -85,9 +85,14 @@ class User(Resource):
 
     def delete(self, name):
 
-        sql = """UPDATE USERS SET active = 0 WHERE name = %s"""
-        self.db.query(sql, (name))
-        return "{} is deleted.".format(name), 200
+        sql = """SELECT * FROM users WHERE name = %s AND active = 1"""
+        data = self.db.selectOne(sql, (name))
+        if(data):
+            sql = """UPDATE USERS SET active = 0 WHERE name = %s"""
+            self.db.query(sql, (name))
+            return "{} is deleted.".format(name), 200
+        else:
+            return "User not found", 404
 
 
 api.add_resource(User, "/user/<string:name>")
