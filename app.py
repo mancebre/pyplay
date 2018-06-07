@@ -4,6 +4,8 @@ from flask_restful import Api, Resource, reqparse
 app = Flask(__name__)
 api = Api(app)
 
+print("Is this gonna work???")
+
 users = [
     {
         "name": "Nicholas",
