@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2018 at 02:50 PM
+-- Generation Time: Jun 07, 2018 at 04:44 PM
 -- Server version: 10.1.31-MariaDB
 -- PHP Version: 7.1.16
 
@@ -34,18 +34,18 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `age` int(11) NOT NULL,
-  `occupation` varchar(255) COLLATE utf8_bin NOT NULL
+  `occupation` varchar(255) COLLATE utf8_bin NOT NULL,
+  `active` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `age`, `occupation`) VALUES
-(1, 'Mike', 33, 'Fucker'),
-(3, 'Newguy', 45, 'nonononon'),
-(4, 'Newguy2', 45, 'nonononon'),
-(5, 'Newguy3', 26, 'Developer');
+INSERT INTO `users` (`id`, `name`, `age`, `occupation`, `active`) VALUES
+(6, 'Lucy', 25, 'Sales', 1),
+(7, 'David', 46, 'CEO', 1),
+(8, 'Jon', 43, 'Teacher', 1);
 
 --
 -- Indexes for dumped tables
@@ -65,7 +65,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

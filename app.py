@@ -2,59 +2,47 @@
 
 import pymysql
 
-# Open database connection
-db = pymysql.connect("localhost","root","","testdb" )
-
-# prepare a cursor object using cursor() method
-cursor = db.cursor()
-
-# Drop table if it already exist using execute() method.
-cursor.execute("DROP TABLE IF EXISTS EMPLOYEE")
-
-# Create table as per requirement
-# sql = """CREATE TABLE EMPLOYEE (
-#          FIRST_NAME  CHAR(20) NOT NULL,
-#          LAST_NAME  CHAR(20),
-#          AGE INT,  
-#          SEX CHAR(1),
-#          INCOME FLOAT )"""
-
-# cursor.execute(sql)
-
-# disconnect from server
-# db.close()
-
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
 api = Api(app)
 
-users = [
-    {
-        "name": "Nicholas",
-        "age": 42,
-        "occupation": "Network Engineer"
-    },
-    {
-        "name": "Elvin",
-        "age": 32,
-        "occupation": "Doctor"
-    },
-    {
-        "name": "Jass",
-        "age": 22,
-        "occupation": "Web Developer"
-    }
-]
+class MyDB(object):
+
+    def __init__(self):
+        self._db_connection = pymysql.connect("localhost","root","","testdb" )
+        self._db_cur = self._db_connection.cursor()
+
+    def query(self, query, params):
+        self._db_cur.execute(query, params)
+        return self._db_connection.commit()
+
+    def selectOne(self, query, params):
+        self._db_cur.execute(query, params)
+        return self._db_cur.fetchone()
+
+    def __del__(self):
+        self._db_connection.close()
 
 
 class User(Resource):
+
+    def __init__(self):
+        self.db = MyDB()
+
     def get(self, name):
-        for user in users:
-            if (name == user["name"]):
-                return user, 200
-        return "User not found", 404
+        sql = """SELECT * FROM users WHERE name = %s AND active = 1"""
+        data = self.db.selectOne(sql, (name))
+        if(data):
+            user = {
+                "name": data[1],
+                "age": data[2],
+                "occupation": data[3]
+            }
+            return user, 200
+        else:
+            return "User not found", 404
 
     def post(self, name):
         parser = reqparse.RequestParser()
@@ -62,20 +50,18 @@ class User(Resource):
         parser.add_argument("occupation")
         args = parser.parse_args()
 
-        for user in users:
-            if (name == user["name"]):
-                return "User with name {} already exists".format(name), 400
+        sql = """SELECT name FROM users WHERE name = %s"""
+        data = self.db.selectOne(sql, (name))
+        if(data):
+            return "User with name {} already exists".format(name), 400
 
+        sql = """INSERT INTO `users` (`id`, `name`, `age`, `occupation`, `active`) VALUES (NULL, %s, %s, %s, 1)"""
+        self.db.query(sql, (name, args['age'], args['occupation']))
         user = {
             "name": name,
-            "age": args["age"],
-            "occupation": args["occupation"]
+            "age": args['age'],
+            "occupation": args['occupation']
         }
-
-        users.append(user)
-        sql = """INSERT INTO `users` (`id`, `name`, `age`, `occupation`) VALUES (NULL, %s, %s, %s)"""
-        cursor.execute(sql, (user['name'], user['age'], user['occupation']))
-        db.commit()
 
         return user, 201
 
@@ -85,23 +71,22 @@ class User(Resource):
         parser.add_argument("occupation")
         args = parser.parse_args()
 
-        for user in users:
-            if (name == user["name"]):
-                user["age"] = args["age"]
-                user["occupation"] = args["occupation"]
-                return user, 200
-
         user = {
             "name": name,
             "age": args["age"],
             "occupation": args["occupation"]
         }
-        users.append(user)
-        return user, 201
+
+        sql = """UPDATE USERS SET name = %s, age = %s, occupation = %s WHERE name = %s"""
+        self.db.query(sql, (name, args['age'], args['occupation'], name))
+        return user, 200
+        # TODO if user don't exists create it?
+        # return user, 201
 
     def delete(self, name):
-        global users
-        users = [user for user in users if user["name"] != name]
+
+        sql = """UPDATE USERS SET active = 0 WHERE name = %s"""
+        self.db.query(sql, (name))
         return "{} is deleted.".format(name), 200
 
 
