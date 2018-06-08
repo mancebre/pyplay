@@ -1,30 +1,31 @@
 
 from database import MyDB
 
-class User():
+
+class User:
 
     def __init__(self):
         self.db = MyDB()
 
-    def getActiveUserByName(self, name):
+    def get_active_user_by_name(self, name):
         sql = """SELECT * FROM users WHERE name = %s AND active = 1"""
-        data = self.db.selectOne(sql, (name))
+        data = self.db.select_one(sql, (name))
         
-        if(data):
+        if data:
             return data
         else:
             return False
 
-    def isUserExist(self, name):
+    def is_user_exist(self, name):
         sql = """SELECT * FROM users WHERE name = %s"""
-        data = self.db.selectOne(sql, (name))
+        data = self.db.select_one(sql, name)
 
         if(data):
             return True
         else:
             return False
 
-    def createUser(self, name, age, occupation):
+    def create_user(self, name, age, occupation):
         sql = """INSERT INTO `users` (`id`, `name`, `age`, `occupation`, `active`) VALUES (NULL, %s, %s, %s, 1)"""
         self.db.query(sql, (name, age, occupation))
         user = {
@@ -35,7 +36,7 @@ class User():
             
         return user
 
-    def updateUser(self, name, age, occupation):
+    def update_user(self, name, age, occupation):
         user = {
             "name": name,
             "age": age,
@@ -47,8 +48,8 @@ class User():
             
         return user
 
-    def deactivateUser(self, name):
+    def deactivate_user(self, name):
         sql = """UPDATE USERS SET active = 0 WHERE name = %s"""
-        self.db.query(sql, (name))
+        self.db.query(sql, name)
 
         return True

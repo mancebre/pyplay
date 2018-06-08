@@ -12,7 +12,7 @@ class UserAPI(Resource):
         self.userModel = UserModel
 
     def get(self, name):
-        return self.user.returnUser(self, name)
+        return self.user.return_user(self, name)
 
     def post(self, name):
         parser = reqparse.RequestParser()
@@ -20,7 +20,7 @@ class UserAPI(Resource):
         parser.add_argument("occupation")
         args = parser.parse_args()
 
-        return self.user.addUser(self, name, args)
+        return self.user.add_user(self, name, args)
 
     def put(self, name):
         parser = reqparse.RequestParser()
@@ -28,7 +28,7 @@ class UserAPI(Resource):
         parser.add_argument("occupation")
         args = parser.parse_args()
 
-        return self.user.updateUser(self, name, args)
+        return self.user.update_user(self, name, args)
 
     def delete(self, name):
-        return self.user.deactivateUser(self, name)
+        return self.user.deactivate_user(self, name)
