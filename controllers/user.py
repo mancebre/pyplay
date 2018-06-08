@@ -1,9 +1,9 @@
 
-from database import MyDB
+from libraries.database import MyDB
 from models.user import User as UserModel
 
 
-class User():
+class User:
 
     def __init__(self):
         self.db = MyDB()

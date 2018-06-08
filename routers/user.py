@@ -1,8 +1,8 @@
 
-from flask_restful import Api, Resource, reqparse
+from flask_restful import Resource, reqparse
 from controllers.user import User
 from models.user import User as UserModel
-from database import MyDB
+from libraries.database import MyDB
 
 class UserAPI(Resource):
 

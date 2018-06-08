@@ -1,5 +1,5 @@
 
-from database import MyDB
+from libraries.database import MyDB
 
 
 class User:
