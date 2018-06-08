@@ -20,7 +20,7 @@ class User:
         sql = """SELECT * FROM users WHERE name = %s"""
         data = self.db.select_one(sql, name)
 
-        if(data):
+        if data:
             return True
         else:
             return False
