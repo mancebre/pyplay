@@ -10,7 +10,7 @@ class User():
         self.userModel = UserModel
 
     def return_user(self, name):
-        data = self.userModel.get_active_user_by_name(name)
+        data = self.userModel.get_active_user_by_name(self, name)
         if data:
             user = {
                 "name": data[1],
@@ -34,7 +34,7 @@ class User():
         return user, 200
 
     def deactivate_user(self, name):
-        data = self.userModel.get_active_user_by_name(name)
+        data = self.userModel.get_active_user_by_name(self, name)
         if data:
             self.userModel.deactivate_user(self, name)
             return "{} is deleted.".format(name), 200
