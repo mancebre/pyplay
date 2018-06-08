@@ -1,7 +1,7 @@
 
 from database import MyDB
 
-class Users():
+class User():
 
     def __init__(self):
         self.db = MyDB()

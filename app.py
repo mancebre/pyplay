@@ -2,7 +2,7 @@
 
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
-from routers.usersapi import UserAPI
+from routers.user import UserAPI
 
 app = Flask(__name__)
 api = Api(app)
