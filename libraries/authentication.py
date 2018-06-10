@@ -15,7 +15,8 @@ from config import Config
 
 class Auth:
 
-    def authenticate(self):
+    @staticmethod
+    def authenticate():
 
         encoded = request.headers.get('Authorization')
 
