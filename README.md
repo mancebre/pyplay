@@ -15,3 +15,7 @@ pip install pymysql
 ````bash
 pip install PyJWT
 ````
+
+````bash
+pip install flask flask-cors
+````

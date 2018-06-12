@@ -7,9 +7,9 @@ class User:
     def __init__(self):
         self.db = MyDB()
 
-    def get_active_user_by_name(self, name):
-        sql = """SELECT * FROM users WHERE name = %s AND active = 1"""
-        data = self.db.select_one(sql, (name))
+    def get_active_user_by_name(self, args):
+        sql = """SELECT * FROM users WHERE email = %s AND password = %s AND active = 1"""
+        data = self.db.select_one(sql, (args['email'], args["password"]))
         
         if data:
             return data

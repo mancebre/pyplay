@@ -9,15 +9,20 @@ class User:
         self.db = MyDB()
         self.userModel = UserModel
 
-    def return_user(self, name):
-        data = self.userModel.get_active_user_by_name(self, name)
+    def return_user(self, args):
+        data = self.userModel.get_active_user_by_name(self, args)
         if data:
             user = {
-                "name": data[1],
-                "age": data[2],
-                "occupation": data[3]
+                "username": data[1],
+                "email": data[3],
+                "firstname": data[4],
+                "lastname": data[5]
             }
-            return user, 200
+            result = {
+                'userData': user,
+                'token': 123456
+            }
+            return result, 200
         else:
             return "User not found", 404
 
