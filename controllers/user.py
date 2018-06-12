@@ -1,6 +1,8 @@
 
 from libraries.database import MyDB
 from models.user import User as UserModel
+import jwt
+from config import Config
 
 
 class User:
@@ -18,9 +20,10 @@ class User:
                 "firstname": data[4],
                 "lastname": data[5]
             }
+
             result = {
                 'userData': user,
-                'token': 123456
+                'token': str(jwt.encode(user, Config.SECRET_KEY, algorithm=Config.ALGORITHM))
             }
             return result, 200
         else:
