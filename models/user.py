@@ -11,7 +11,7 @@ class User:
         self.db = MyDB()
 
     def get_user_roles(self, userId):
-        sql = """SELECT * FROM roles WHERE user_id = %s"""
+        sql = """SELECT * FROM roles r INNER JOIN user_roles ur ON ur.role_id = r.id WHERE user_id = %s"""
         data = self.db.select(sql, (userId))
 
         if data:
