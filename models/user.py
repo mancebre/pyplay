@@ -2,20 +2,46 @@
 from libraries.database import MyDB
 
 
+# TODO Make this like user object
+
+
 class User:
 
     def __init__(self):
         self.db = MyDB()
 
-    def get_active_user_by_name(self, args):
+    def get_user_roles(self, userId):
+        sql = """SELECT * FROM roles WHERE user_id = %s"""
+        data = self.db.select(sql, (userId))
+
+        if data:
+            roles = list()
+            for role in data:
+                roles.append({
+                    "role_id": role[0],
+                    "role_name": role[1]
+                })
+            return roles
+        else:
+            return False
+
+    def get_active_user(self, args):
         sql = """SELECT * FROM users WHERE email = %s AND password = %s AND active = 1"""
         data = self.db.select_one(sql, (args['email'], args["password"]))
         
         if data:
-            return data
+            userData = {
+                "user_id": data[0],
+                "username": data[1],
+                "email": data[3],
+                "firstname": data[4],
+                "lastname": data[5]
+            }
+            return userData
         else:
             return False
 
+    # Check by username
     def is_user_exist(self, name):
         sql = """SELECT * FROM users WHERE name = %s"""
         data = self.db.select_one(sql, name)

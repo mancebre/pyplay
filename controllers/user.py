@@ -1,29 +1,29 @@
 
-from libraries.database import MyDB
+
 from models.user import User as UserModel
-import jwt
-from config import Config
+from libraries.token import Token
 
 
 class User:
 
     def __init__(self):
-        self.db = MyDB()
         self.userModel = UserModel
 
     def return_user(self, args):
-        data = self.userModel.get_active_user_by_name(self, args)
-        if data:
-            user = {
-                "username": data[1],
-                "email": data[3],
-                "firstname": data[4],
-                "lastname": data[5]
+        user_data = self.userModel.get_active_user(self, args)
+        # Get user roles by user id
+        user_roles = self.userModel.get_user_roles(self, user_data["user_id"])
+
+        if user_data and user_roles:
+            payload = {
+                "user_data": user_data,
+                "user_roles": user_roles
             }
 
+            token = Token(payload)
+
             result = {
-                'userData': user,
-                'token': str(jwt.encode(user, Config.SECRET_KEY, algorithm=Config.ALGORITHM))
+                'token': token.token
             }
             return result, 200
         else:
@@ -42,7 +42,7 @@ class User:
         return user, 200
 
     def deactivate_user(self, name):
-        data = self.userModel.get_active_user_by_name(self, name)
+        data = self.userModel.get_active_user(self, name)
         if data:
             self.userModel.deactivate_user(self, name)
             return "{} is deleted.".format(name), 200
