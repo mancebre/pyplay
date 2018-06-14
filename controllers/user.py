@@ -30,12 +30,28 @@ class User:
         else:
             return "User not found", 404
 
-    def add_user(self, name, args):
-        is_user_exist = self.userModel.is_user_exist(self, name)
-        if is_user_exist:
-            return "User with name {} already exists".format(name), 400
+    def add_user(self, args):
+        # Check is username taken
+        name = args["username"]
+        is_username_taken = self.userModel.is_username_taken(self, name)
+        if is_username_taken:
+            return "User with username {} already exists".format(name), 400
 
-        user = self.userModel.create_user(self, name, args['age'], args['occupation'])
+        # Check is email taken
+        email = args["email"]
+        is_email_taken = self.userModel.is_email_taken(self, email)
+        if is_email_taken:
+            return "User with email address {} already exists".format(email), 400
+
+        # Prepare data
+        username = args["username"]
+        password = args["password"]
+        email = args["email"]
+        firstname = args["firstname"]
+        lastname = args["lastname"]
+        newsletter = args["newsletter"]
+
+        user = self.userModel.create_user(self, username, password, email, firstname, lastname, newsletter)
         return user, 201
 
     def update_user(self, name, args):

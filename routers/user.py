@@ -12,7 +12,7 @@ class UserAPI(Resource):
         self.user = User
         self.userModel = UserModel
 
-    def get(self, id):
+    def get(self):
         email = request.args.get('email')
         password = request.args.get('password')
         args = {
@@ -21,21 +21,25 @@ class UserAPI(Resource):
         }
         return self.user.return_user(self, args)
 
-    def post(self, name):
+    def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
+        parser.add_argument("email")
+        parser.add_argument("firstname")
+        parser.add_argument("lastname")
+        parser.add_argument("newsletter")
+        parser.add_argument("password")
+        parser.add_argument("username")
         args = parser.parse_args()
 
-        return self.user.add_user(self, name, args)
+        return self.user.add_user(self, args)
 
-    def put(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
-        args = parser.parse_args()
-
-        return self.user.update_user(self, name, args)
-
-    def delete(self, name):
-        return self.user.deactivate_user(self, name)
+    # def put(self, name):
+    #     parser = reqparse.RequestParser()
+    #     parser.add_argument("age")
+    #     parser.add_argument("occupation")
+    #     args = parser.parse_args()
+    #
+    #     return self.user.update_user(self, name, args)
+    #
+    # def delete(self, name):
+    #     return self.user.deactivate_user(self, name)

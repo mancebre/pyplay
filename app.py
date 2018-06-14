@@ -27,6 +27,6 @@ def login():
 
 api = Api(app)
 
-api.add_resource(UserAPI, "/user/<string:id>")
+api.add_resource(UserAPI, "/user/")
 
 app.run(debug=True)

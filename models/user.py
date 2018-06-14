@@ -42,8 +42,8 @@ class User:
             return False
 
     # Check by username
-    def is_user_exist(self, name):
-        sql = """SELECT * FROM users WHERE name = %s"""
+    def is_username_taken(self, name):
+        sql = """SELECT * FROM users WHERE username = %s"""
         data = self.db.select_one(sql, name)
 
         if data:
@@ -51,16 +51,21 @@ class User:
         else:
             return False
 
-    def create_user(self, name, age, occupation):
-        sql = """INSERT INTO `users` (`id`, `name`, `age`, `occupation`, `active`) VALUES (NULL, %s, %s, %s, 1)"""
-        self.db.query(sql, (name, age, occupation))
-        user = {
-            "name": name,
-            "age": age,
-            "occupation": occupation
-        }
+    def is_email_taken(self, email):
+        sql = """SELECT * FROM users WHERE email = %s"""
+        data = self.db.select_one(sql, email)
+
+        if data:
+            return True
+        else:
+            return False
+
+    def create_user(self, username, password, email, firstname, lastname, newsletter):
+        # TODO I fucked up something with foreign keys in database :(
+        sql = """INSERT INTO `users` (`username`, `password`, `email`, `firstname`, `lastname`, `active`, `newsletter`) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+        result = self.db.query(sql, (username, password, email, firstname, lastname, 1, newsletter))
             
-        return user
+        return result
 
     def update_user(self, name, age, occupation):
         user = {
