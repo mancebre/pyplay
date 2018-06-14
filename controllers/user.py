@@ -11,21 +11,22 @@ class User:
 
     def return_user(self, args):
         user_data = self.userModel.get_active_user(self, args)
-        # Get user roles by user id
-        user_roles = self.userModel.get_user_roles(self, user_data["user_id"])
+        if user_data:
+            # Get user roles by user id
+            user_roles = self.userModel.get_user_roles(self, user_data["user_id"])
 
-        if user_data and user_roles:
-            payload = {
-                "user_data": user_data,
-                "user_roles": user_roles
-            }
+            if user_roles:
+                payload = {
+                    "user_data": user_data,
+                    "user_roles": user_roles
+                }
 
-            token = Token(payload)
+                token = Token(payload)
 
-            result = {
-                'token': token.token
-            }
-            return result, 200
+                result = {
+                    'token': token.token
+                }
+                return result, 200
         else:
             return "User not found", 404
 
