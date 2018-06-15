@@ -32,7 +32,7 @@ class User:
 
     def add_user(self, args):
         # Check is username taken
-        name = args["username"]
+        name = args["username"].encode('utf-8')
         is_username_taken = self.userModel.is_username_taken(self, name)
         if is_username_taken:
             return "User with username {} already exists".format(name), 400
@@ -44,18 +44,27 @@ class User:
             return "User with email address {} already exists".format(email), 400
 
         # Prepare data
-        username = args["username"]
-        password = args["password"]
-        email = args["email"]
-        firstname = args["firstname"]
-        lastname = args["lastname"]
-        newsletter = args["newsletter"]
+        username = args["username"].encode('utf-8')
+        password = args["password"].encode('utf-8')
+        email = args["email"].encode('utf-8')
+        firstname = args["firstname"].encode('utf-8')
+        lastname = args["lastname"].encode('utf-8')
+        newsletter = args["newsletter"].encode('utf-8')
 
-        user = self.userModel.create_user(self, username, password, email, firstname, lastname, newsletter)
-        return user, 201
+        user_id = self.userModel.create_user(self, username, password, email, firstname, lastname, newsletter)
+        role = User.assign_role(self, user_id, "User");
+        return role, 201
 
-    def update_user(self, name, args):
-        user = self.userModel.update_user(self, name, args['age'], args['occupation'])
+    def assign_role(self, user_id, role):
+        role_id = {
+            'Admin': 2,
+            'User': 3
+        }.get(role, 9)
+
+        return self.userModel.add_user_role(self, user_id, role_id)
+
+    def update_user(self, user, data):
+        user = self.userModel.update_user(self, user, data)
         return user, 200
 
     def deactivate_user(self, name):

@@ -61,10 +61,15 @@ class User:
             return False
 
     def create_user(self, username, password, email, firstname, lastname, newsletter):
-        # TODO I fucked up something with foreign keys in database :(
         sql = """INSERT INTO `users` (`username`, `password`, `email`, `firstname`, `lastname`, `active`, `newsletter`) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
-        result = self.db.query(sql, (username, password, email, firstname, lastname, 1, newsletter))
+        result = self.db.insert(sql, (username, password, email, firstname, lastname, 1, newsletter))
             
+        return result
+
+    def add_user_role(self, user_id, role_id):
+        sql = """INSERT INTO user_roles (user_id, role_id) VALUES (%s, %s);"""
+        result = self.db.insert(sql, (user_id, role_id))
+
         return result
 
     def update_user(self, name, age, occupation):
