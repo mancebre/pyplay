@@ -32,7 +32,7 @@ class User:
 
     def add_user(self, args):
         # Check is username taken
-        name = args["username"].encode('utf-8')
+        name = args["username"]
         is_username_taken = self.userModel.is_username_taken(self, name)
         if is_username_taken:
             return "User with username {} already exists".format(name), 400
@@ -44,12 +44,12 @@ class User:
             return "User with email address {} already exists".format(email), 400
 
         # Prepare data
-        username = args["username"].encode('utf-8')
-        password = args["password"].encode('utf-8')
-        email = args["email"].encode('utf-8')
-        firstname = args["firstname"].encode('utf-8')
-        lastname = args["lastname"].encode('utf-8')
-        newsletter = args["newsletter"].encode('utf-8')
+        username = args["username"]
+        password = args["password"]
+        email = args["email"]
+        firstname = args["firstname"]
+        lastname = args["lastname"]
+        newsletter = args["newsletter"]
 
         user_id = self.userModel.create_user(self, username, password, email, firstname, lastname, newsletter)
         role = User.assign_role(self, user_id, "User");

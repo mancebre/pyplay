@@ -6,7 +6,7 @@ import pymysql
 class MyDB(object):
 
     def __init__(self):
-        self._db_connection = pymysql.connect("localhost","root","","testdb" )
+        self._db_connection = pymysql.connect("localhost","root","","testdb", use_unicode=True, charset="utf8" )
         self._db_cur = self._db_connection.cursor()
 
     def query(self, query, params):
