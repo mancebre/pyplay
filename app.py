@@ -9,6 +9,7 @@ from flask_cors import CORS, cross_origin
 from flask import Flask
 from flask_restful import Api, Resource, reqparse, request
 from routers.user import UserAPI
+from routers.recipe import RecipeAPI
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -29,5 +30,6 @@ def login():
 api = Api(app)
 
 api.add_resource(UserAPI, "/user/")
+api.add_resource(RecipeAPI, "/recipe/")
 
 app.run(debug=True)
