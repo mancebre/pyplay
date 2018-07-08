@@ -1,6 +1,7 @@
 from libraries.database import MyDB
 import json
 
+
 # TODO Learn more about this!
 class Recipe:
 
@@ -32,5 +33,3 @@ class Recipe:
     # Load recipe by id from database
     def load(self):
         pass
-
-
