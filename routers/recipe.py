@@ -76,9 +76,9 @@ class RecipeAPI(Resource):
 
         # TODO Add recipe controller!
 
-        print(recipe)
+        print(recipe.data())
 
-        return args
+        return recipe.data()
 
     # def put(self, name):
     #     parser = reqparse.RequestParser()
