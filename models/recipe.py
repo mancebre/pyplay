@@ -33,12 +33,12 @@ class Recipe:
         self.pg = pg
         self.vg = vg
         self.sleep_time = sleep_time
-        # No fucking idea why this don't work!!!
-        self.vape_ready = 1 if vape_ready else 0
+        self.vape_ready = vape_ready
         self.wvpqa = wvpqa
 
-        print(vape_ready)
-        print(self.vape_ready)
+        # print(type(1))
+        # print(vape_ready)
+        # print(self.vape_ready)
 
     def set(self, amount, base, comment, desired_strength, flavor, nicotine, pg, vg, sleep_time, vape_ready, wvpqa):
 
@@ -56,8 +56,7 @@ class Recipe:
         self.pg = pg
         self.vg = vg
         self.sleep_time = sleep_time
-        # No fucking idea why this don't work!!!
-        self.vape_ready = 1 if vape_ready else 0
+        self.vape_ready = vape_ready
         self.wvpqa = wvpqa
 
     def data(self):
@@ -77,14 +76,23 @@ class Recipe:
             "wvpqa": self.wvpqa
         }
 
-    # Save recipe and return recipe id
     def save(self):
+        # recipe goes in recipe table and flavors goes in flavors table
         sql = """INSERT INTO `recipe` 
         (amount, desired_strength, pg, vg, nicotine_strength, nicotine_pg, nicotine_vg, wvpga, sleep_time, vape_ready, comment) 
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        result = self.db.insert(sql, (self.amount, self.desired_strength, self.pg, self.vg, self.nicotine_strength, self.nicotine_pg, self.nicotine_vg, self.wvpqa, self.sleep_time, self.vape_ready, self.comment))
+        recipe_id = self.db.insert(sql, (self.amount, self.desired_strength, self.pg, self.vg, self.nicotine_strength, self.nicotine_pg, self.nicotine_vg, self.wvpqa, self.sleep_time, self.vape_ready, self.comment))
 
-        return result
+        self.save_flavors(recipe_id)
+
+        return recipe_id
+
+    def save_flavors(self, recipe_id):
+        for flavor in self.flavor:
+            sql = """INSERT INTO `recipe_flavors`
+            (recipe_id, name, amount, percentage, `type`, grams)
+            VALUES (%s, %s, %s, %s, %s, %s)"""
+            self.db.insert(sql, (recipe_id, flavor["name"], flavor["amount"], flavor["percentage"], flavor["type"], flavor["grams"]))
 
     # Load recipe by id from database
     def load(self):
