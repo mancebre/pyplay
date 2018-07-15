@@ -5,7 +5,7 @@ import json
 # TODO Learn more about this!
 class Recipe:
 
-    def __init__(self, amount=None, base=None, comment=None, desired_strength=None, flavor=None, nicotine=None, pg=None, vg=None, sleep_time=None, vape_ready=None, wvpqa=None):
+    def __init__(self, name=None, amount=None, base=None, comment=None, desired_strength=None, flavor=None, nicotine=None, pg=None, vg=None, sleep_time=None, vape_ready=None, wvpqa=None):
         self.db = MyDB()
 
         if not nicotine:
@@ -22,6 +22,7 @@ class Recipe:
         else:
             flavor_obj = json.loads(flavor)
 
+        self.name = name
         self.amount = amount
         self.base = base
         self.comment = comment
@@ -40,11 +41,12 @@ class Recipe:
         # print(vape_ready)
         # print(self.vape_ready)
 
-    def set(self, amount, base, comment, desired_strength, flavor, nicotine, pg, vg, sleep_time, vape_ready, wvpqa):
+    def set(self, name, amount, base, comment, desired_strength, flavor, nicotine, pg, vg, sleep_time, vape_ready, wvpqa):
 
         nicotine_obj = json.loads(nicotine)
         flavor_obj = json.loads(flavor)
 
+        self.name = name
         self.amount = amount
         self.base = base
         self.comment = comment
@@ -61,6 +63,7 @@ class Recipe:
 
     def data(self):
         return {
+            "name": self.name,
             "amount": self.amount,
             "base": self.base,
             "comment": self.comment,
@@ -79,9 +82,9 @@ class Recipe:
     def save(self):
         # recipe goes in recipe table and flavors goes in flavors table
         sql = """INSERT INTO `recipe` 
-        (amount, desired_strength, pg, vg, nicotine_strength, nicotine_pg, nicotine_vg, wvpga, sleep_time, vape_ready, comment) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        recipe_id = self.db.insert(sql, (self.amount, self.desired_strength, self.pg, self.vg, self.nicotine_strength, self.nicotine_pg, self.nicotine_vg, self.wvpqa, self.sleep_time, self.vape_ready, self.comment))
+        (name, amount, desired_strength, pg, vg, nicotine_strength, nicotine_pg, nicotine_vg, wvpga, sleep_time, vape_ready, comment) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        recipe_id = self.db.insert(sql, (self.name, self.amount, self.desired_strength, self.pg, self.vg, self.nicotine_strength, self.nicotine_pg, self.nicotine_vg, self.wvpqa, self.sleep_time, self.vape_ready, self.comment))
 
         self.save_flavors(recipe_id)
 

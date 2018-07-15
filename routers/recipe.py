@@ -46,6 +46,7 @@ class RecipeAPI(Resource):
         # wvpga: recipeData.wvpga
 
         parser = reqparse.RequestParser()
+        parser.add_argument("name")
         parser.add_argument("amount")
         parser.add_argument("base")
         parser.add_argument("comment")

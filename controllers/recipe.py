@@ -8,6 +8,7 @@ class Recipe:
     def save(self, args):
 
         recipe = RecipeModel(
+            args['name'],
             args['amount'],
             args['base'],
             args['comment'],
