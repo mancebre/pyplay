@@ -6,86 +6,47 @@ import json
 # TODO THIS IS BULLSHIT! Do it right way!!
 class Recipe:
 
-    def __init__(self, name=None, amount=None, base=None, comment=None, desired_strength=None, flavor=None, nicotine=None, pg=None, vg=None, sleep_time=None, vape_ready=None, wvpqa=None):
+    def __init__(self):
         self.db = MyDB()
 
-        if not nicotine:
-            nicotine_obj = {
-                "pg": None,
-                "vg": None,
-                "strength": None
-            }
-        else:
-            nicotine_obj = json.loads(nicotine)
-
-        if not flavor:
-            flavor_obj = None
-        else:
-            flavor_obj = json.loads(flavor)
-
-        self.name = name
-        self.amount = amount
-        self.base = base
-        self.comment = comment
-        self.desired_strength = desired_strength
-        self.flavor = flavor_obj
-        self.nicotine_pg = nicotine_obj["pg"]
-        self.nicotine_vg = nicotine_obj["vg"]
-        self.nicotine_strength = nicotine_obj["strength"]
-        self.pg = pg
-        self.vg = vg
-        self.sleep_time = sleep_time
-        self.vape_ready = vape_ready
-        self.wvpqa = wvpqa
-
-        # print(type(1))
-        # print(vape_ready)
-        # print(self.vape_ready)
-
-    def set(self, name, amount, base, comment, desired_strength, flavor, nicotine, pg, vg, sleep_time, vape_ready, wvpqa):
+    def save(self,
+             name,
+             amount,
+             base,
+             comment,
+             desired_strength,
+             flavor,
+             nicotine,
+             pg,
+             vg,
+             sleep_time,
+             vape_ready,
+             wvpqa):
 
         nicotine_obj = json.loads(nicotine)
         flavor_obj = json.loads(flavor)
 
-        self.name = name
-        self.amount = amount
-        self.base = base
-        self.comment = comment
-        self.desired_strength = desired_strength
-        self.flavor = flavor_obj
-        self.nicotine_pg = nicotine_obj["pg"]
-        self.nicotine_vg = nicotine_obj["vg"]
-        self.nicotine_strength = nicotine_obj["strength"]
-        self.pg = pg
-        self.vg = vg
-        self.sleep_time = sleep_time
-        self.vape_ready = vape_ready
-        self.wvpqa = wvpqa
+        flavor = flavor_obj
+        nicotine_pg = nicotine_obj["pg"]
+        nicotine_vg = nicotine_obj["vg"]
+        nicotine_strength = nicotine_obj["strength"]
 
-    def data(self):
-        return {
-            "name": self.name,
-            "amount": self.amount,
-            "base": self.base,
-            "comment": self.comment,
-            "desired_strength": self.desired_strength,
-            "flavor": self.flavor,
-            "nicotine_pg": self.nicotine_pg,
-            "nicotine_vg": self.nicotine_vg,
-            "nicotine_strength": self.nicotine_strength,
-            "pg": self.pg,
-            "vg": self.vg,
-            "sleep_time": self.sleep_time,
-            "vape_ready": self.vape_ready,
-            "wvpqa": self.wvpqa
-        }
-
-    def save(self):
         # recipe goes in recipe table and flavors goes in flavors table
         sql = """INSERT INTO `recipe` 
         (name, amount, desired_strength, pg, vg, nicotine_strength, nicotine_pg, nicotine_vg, wvpga, sleep_time, vape_ready, comment) 
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-        recipe_id = self.db.insert(sql, (self.name, self.amount, self.desired_strength, self.pg, self.vg, self.nicotine_strength, self.nicotine_pg, self.nicotine_vg, self.wvpqa, self.sleep_time, self.vape_ready, self.comment))
+        recipe_id = self.db.insert(sql, (name,
+                                         amount,
+                                         desired_strength,
+                                         pg,
+                                         vg,
+                                         nicotine_strength,
+                                         nicotine_pg,
+                                         nicotine_vg,
+                                         wvpqa,
+                                         sleep_time,
+                                         vape_ready,
+                                         comment))
 
         self.save_flavors(recipe_id)
 
@@ -101,3 +62,16 @@ class Recipe:
     # Load recipe by id from database
     def load(self):
         pass
+
+    def get(self, recipe_id):
+        sql = """SELECT * FROM recipe WHERE id = %s"""
+        data = self.db.select_one(sql, recipe_id)
+
+        print(data)
+
+        if data:
+            self.set(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], data[10],
+                     data[11])
+            return self.data()
+        else:
+            return False

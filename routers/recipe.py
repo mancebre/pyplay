@@ -18,33 +18,13 @@ class RecipeAPI(Resource):
         self.db = MyDB()
         self.user = User
         self.userModel = UserModel
+        self.recipe = Recipe
 
     def get(self):
-        email = request.args.get('email')
-        password = request.args.get('password')
-        args = {
-            'email': email,
-            'password': password
-        }
-        return args
+        id = request.args.get('id')
+        return self.recipe.get(self, id)
 
     def post(self):
-        # amount: recipeData.amount,
-        # base: recipeData.base,
-        # comment: recipeData.comment,
-        # desired_strength: recipeData.desired_strength,
-        # flavor: recipeData.flavor,
-        # nicotine: {
-        #     strength: recipeData.strength,
-        #     pg: recipeData.pg,
-        #     vg: recipeData.vg
-        # },
-        # pg: recipeData.pg,
-        # sleep_time: recipeData.sleep_time,
-        # vapeReady: recipeData.vapeReady,
-        # vg: recipeData.vg,
-        # wvpga: recipeData.wvpga
-
         parser = reqparse.RequestParser()
         parser.add_argument("name")
         parser.add_argument("amount")
@@ -60,7 +40,7 @@ class RecipeAPI(Resource):
         parser.add_argument("wvpga")
         args = parser.parse_args()
 
-        return Recipe.save(self, args)
+        return Recipe.save(RecipeModel, args)
 
     # def put(self, name):
     #     parser = reqparse.RequestParser()

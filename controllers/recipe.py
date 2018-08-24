@@ -3,11 +3,15 @@ from models.recipe import Recipe as RecipeModel
 
 class Recipe:
     def __init__(self):
-        pass
+        self.recipeModel = RecipeModel
 
     def save(self, args):
 
-        recipe = RecipeModel(
+        # print(self)
+        # return False
+
+        return self.recipeModel.save(
+            self,
             args['name'],
             args['amount'],
             args['base'],
@@ -22,8 +26,5 @@ class Recipe:
             args['wvpga'],
         )
 
-        # TODO Add recipe controller!
-
-        # print(recipe.data())
-
-        return recipe.save()
+    def get(self, recipe_id):
+        return self.recipeModel.get(self, recipe_id)
