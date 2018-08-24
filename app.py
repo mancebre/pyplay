@@ -10,6 +10,7 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse, request
 from routers.user import UserAPI
 from routers.recipe import RecipeAPI
+from routers.recipes import RecipesAPI
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -31,5 +32,6 @@ api = Api(app)
 
 api.add_resource(UserAPI, "/user/")
 api.add_resource(RecipeAPI, "/recipe/")
+api.add_resource(RecipesAPI, "/recipes/")
 
 app.run(debug=True)

@@ -3,6 +3,7 @@ import json
 
 
 # TODO Learn more about this!
+# TODO THIS IS BULLSHIT! Do it right way!!
 class Recipe:
 
     def __init__(self, name=None, amount=None, base=None, comment=None, desired_strength=None, flavor=None, nicotine=None, pg=None, vg=None, sleep_time=None, vape_ready=None, wvpqa=None):
